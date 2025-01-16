@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Tracker</title>
+    <title>Runs Tracker</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,7 +57,7 @@
     <div class="widget-container">
         <h1>🏃‍♀️ Shuffles This Week</h1>
         <div id="count-goal">0 / 4</div>
-        <button onclick="incrementCount()">+ Add Run"</button>
+        <button onclick="incrementCount()">+ Add Run</button>
     </div>
 
     <script>
@@ -66,7 +66,7 @@
         const countGoalDisplay = document.getElementById('count-goal');
 
         // Retrieve the saved count from localStorage
-        let count = localStorage.getItem('waterCount') || 0;
+        let count = localStorage.getItem('runCount') || 0;
         countGoalDisplay.textContent = `${count} / ${goal}`;
 
         // Function to increment the count
@@ -74,7 +74,7 @@
             if (count < goal) {
                 count++;
                 countGoalDisplay.textContent = `${count} / ${goal}`;
-                localStorage.setItem('waterCount', count); // Save the count
+                localStorage.setItem('runCount', count); // Save the count
             }
         }
 
@@ -90,7 +90,7 @@
             setTimeout(() => {
                 count = 0;
                 countGoalDisplay.textContent = `${count} / ${goal}`;
-                localStorage.setItem('waterCount', count);
+                localStorage.setItem('runCount', count);
                 resetAtMidnight();
             }, msUntilMidnight);
         }
@@ -99,3 +99,4 @@
     </script>
 </body>
 </html>
+
