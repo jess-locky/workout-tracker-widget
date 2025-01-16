@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Tracker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: black; /* Set background to black */
+            color: white; /* Default text color to white */
+        }
+        .widget-container {
+            width: 300px;
+            height: 135px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border: 3px solid #0077b6; /* Add border */
+            border-radius: 20px; /* Rounded corners */
+            background-color: #1c1c1c; /* Dark background for container */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Subtle shadow */
+            padding: 10px;
+            text-align: center;
+        }
+        h1 {
+            color: #00b4d8;
+            font-size: 1rem;
+            margin: 0;
+        }
+        #count-goal {
+            font-size: 2rem;
+            color: #90e0ef;
+        }
+        button {
+            background-color: #0096c7;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0077b6;
+        }
+    </style>
+</head>
+<body>
+    <div class="widget-container">
+        <h1>🏃‍♀️ Shuffles This Week</h1>
+        <div id="count-goal">0 / 4</div>
+        <button onclick="incrementCount()">+ Add Glass</button>
+    </div>
+
+    <script>
+        // Set the goal
+        const goal = 4;
+        const countGoalDisplay = document.getElementById('count-goal');
+
+        // Retrieve the saved count from localStorage
+        let count = localStorage.getItem('waterCount') || 0;
+        countGoalDisplay.textContent = `${count} / ${goal}`;
+
+        // Function to increment the count
+        function incrementCount() {
+            if (count < goal) {
+                count++;
+                countGoalDisplay.textContent = `${count} / ${goal}`;
+                localStorage.setItem('waterCount', count); // Save the count
+            }
+        }
+
+        // Reset the count at midnight
+        function resetAtMidnight() {
+            const now = new Date();
+            const msUntilMidnight = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate() + 1,
+                0, 0, 0, 0
+            ) - now;
+            setTimeout(() => {
+                count = 0;
+                countGoalDisplay.textContent = `${count} / ${goal}`;
+                localStorage.setItem('waterCount', count);
+                resetAtMidnight();
+            }, msUntilMidnight);
+        }
+
+        resetAtMidnight(); // Initialize the reset function
+    </script>
+</body>
+</html>
