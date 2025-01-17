@@ -39,6 +39,11 @@
             font-size: 1.8rem;
             color: #F5F5F5;
         }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
         button {
             background-color: #4B0082;  
             color: white;
@@ -47,7 +52,8 @@
             border-radius: 5px;
             font-size: 1rem;
             cursor: pointer;
-            margin-top: 5px;
+            flex: 1; /* Ensure buttons are equal width */
+            margin: 0 5px; /* Spacing between buttons */
         }
         button:hover {
             background-color: #3A0066;  
@@ -58,44 +64,70 @@
     <div class="widget-container">
         <h1>🏃‍♀️ Shuffles This Week</h1>
         <div id="count-goal">0 / 5</div>
-        <button onclick="incrementCount()">+ Add Shuffle</button>
+        <div class="button-container">
+            <button onclick="incrementCount()">+1</button>
+            <button onclick="decrementCount()" ondblclick="resetCount()">-1</button>
+        </div>
     </div>
 
     <script>
-        // Set the goal
         const goal = 5;
         const countGoalDisplay = document.getElementById('count-goal');
 
-        // Retrieve the saved count from localStorage
-        let count = localStorage.getItem('shuffleCount') || 0;
+        let count = parseInt(localStorage.getItem('shuffleCount')) || 0;
         countGoalDisplay.textContent = `${count} / ${goal}`;
 
-        // Function to increment the count
+
         function incrementCount() {
             if (count < goal) {
                 count++;
-                countGoalDisplay.textContent = `${count} / ${goal}`;
-                localStorage.setItem('shuffleCount', count); // Save the count
+                updateCount();
             }
         }
 
-        // Reset the count at midnight
-        function resetAtMidnight() {
+        function decrementCount() {
+            if (count > 0) {
+                count--;
+                updateCount();
+            }
+        }
+
+        function resetCount() {
+            count = 0;
+            updateCount();
+        }
+
+        // Function to update the count display and save to localStorage
+        function updateCount() {
+            countGoalDisplay.textContent = `${count} / ${goal}`;
+            localStorage.setItem('shuffleCount', count);
+        }
+
+        // Function to reset at 1:00 AM every Monday
+        function resetEveryMonday() {
             const now = new Date();
-            const easternOffset = -5; // Eastern Time offset in hours (standard time)
-            const utcMidnight = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1, easternOffset, 0, 0); // Next midnight in EST
-            const msUntilMidnight = utcMidnight - now;
+
+            // Calculate the next Monday at 1:00 AM
+            const day = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+            const daysUntilMonday = (8 - day) % 7; // Days left until next Monday
+            const nextMonday = new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate() + daysUntilMonday, // Add days to get to Monday
+                1, 0, 0, 0 // Set time to 1:00 AM
+            );
+
+            const msUntilMonday = nextMonday - now; // Time difference in milliseconds
 
             setTimeout(() => {
                 count = 0; // Reset the count
-                countGoalDisplay.textContent = `${count} / ${goal}`; // Update the display
-                localStorage.setItem('shuffleCount', count); // Save the reset value
-                resetAtMidnight(); // Schedule the next reset
-            }, msUntilMidnight);
+                updateCount(); // Update the display and save
+                resetEveryMonday(); // Schedule the next reset
+            }, msUntilMonday);
         }
 
-        // Initialize the midnight reset
-        resetAtMidnight();
+        // Initialize the weekly reset and the count
+        resetEveryMonday();
     </script>
 </body>
 </html>
