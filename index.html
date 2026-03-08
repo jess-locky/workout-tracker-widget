@@ -6,127 +6,237 @@
     <title>Shuffle Tracker</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background: #191919;  
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);  
             color: white;  
         }
+
         .widget-container {
-            width: 260px;
-            height: 110px; 
+            width: 300px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            border: 3px solid #191919;  
-            border-radius: 20px;  
-            background-color: #1c1c1c;  
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);  
-            padding: 10px;
+            border-radius: 30px;  
+            background: linear-gradient(145deg, #252540, #1c1c30);
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);  
+            padding: 25px;
             text-align: center;
         }
-        h1 {
-            color: #F5F5F5;
+
+        .header {
             font-size: 1rem;
-            margin: 0;
+            margin-bottom: 5px;
+            color: #b8b8d1;
+            letter-spacing: 1px;
         }
-        #count-goal {
-            font-size: 1.8rem;
-            color: #F5F5F5;
+
+        /* Pink count display */
+        .count-display {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #f472b6;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 20px rgba(244, 114, 182, 0.5);
         }
+
+        /* Status indicator */
+        .status {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 20px;
+            height: 18px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .status.in-progress {
+            color: #c4b5fd;
+            background: rgba(167, 139, 250, 0.15);
+        }
+
+        .status.complete {
+            color: #f9a8d4;
+            background: rgba(244, 114, 182, 0.15);
+        }
+
+        /* Button container */
         .button-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
             width: 100%;
         }
-        button {
-            background-color: #4B0082;  
+
+        /* Base button style */
+        .btn {
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
             cursor: pointer;
-            flex: 1; /* Ensure buttons are equal width */
-            margin: 0 5px; /* Spacing between buttons */
+            transition: all 0.2s ease;
+            font-weight: 500;
         }
-        button:hover {
-            background-color: #3A0066;  
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* Main add button */
+        .btn-add {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            padding: 14px 28px;
+            font-size: 0.95rem;
+        }
+
+        .btn-add:hover {
+            background: linear-gradient(135deg, #a78bfa, #7c3aed);
+        }
+
+        /* Small minus button */
+        .btn-minus {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+            font-size: 1.4rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-minus:hover {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        }
+
+        /* Reset button - cute circular pink */
+        .btn-reset {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f472b6, #db2777);
+            font-size: 1.2rem;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(219, 39, 119, 0.4);
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(135deg, #f9a8d4, #f472b6);
+            box-shadow: 0 6px 20px rgba(219, 39, 119, 0.5);
+        }
+
+        /* Single icon */
+        .icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
         }
     </style>
 </head>
 <body>
     <div class="widget-container">
-        <h1>🏃‍♀️ Shuffles This Week</h1>
-        <div id="count-goal">0 / 5</div>
+        <div class="icon">🏃‍♀️</div>
+        <div class="header">SHUFFLES THIS WEEK</div>
+        <div class="count-display" id="count-goal">0 / 5</div>
+        <div class="status" id="status">Let's get moving!</div>
         <div class="button-container">
-            <button onclick="incrementCount()">+1</button>
-            <button onclick="decrementCount()" ondblclick="resetCount()">-1</button>
+            <button class="btn btn-minus" onclick="decrementCount()">−</button>
+            <button class="btn btn-add" onclick="incrementCount()">🏃‍♀️ Add Shuffle</button>
+            <button class="btn btn-reset" onclick="resetCount()">↻</button>
         </div>
     </div>
 
     <script>
+        // Set the goal
         const goal = 5;
         const countGoalDisplay = document.getElementById('count-goal');
+        const statusDisplay = document.getElementById('status');
 
+        // Retrieve the saved count from localStorage
         let count = parseInt(localStorage.getItem('shuffleCount')) || 0;
-        countGoalDisplay.textContent = `${count} / ${goal}`;
 
+        // Update display on load
+        updateDisplay();
 
+        // Function to increment the count
         function incrementCount() {
             if (count < goal) {
                 count++;
-                updateCount();
+                updateDisplay();
             }
         }
 
+        // Function to decrement the count
         function decrementCount() {
             if (count > 0) {
                 count--;
-                updateCount();
+                updateDisplay();
             }
         }
 
+        // Function to reset the count
         function resetCount() {
             count = 0;
-            updateCount();
+            updateDisplay();
         }
 
-        // Function to update the count display and save to localStorage
-        function updateCount() {
+        // Function to update the display and save to localStorage
+        function updateDisplay() {
             countGoalDisplay.textContent = `${count} / ${goal}`;
             localStorage.setItem('shuffleCount', count);
+
+            if (count >= goal) {
+                statusDisplay.textContent = '🎉 Goal reached!';
+                statusDisplay.className = 'status complete';
+            } else if (count > 0) {
+                const remaining = goal - count;
+                statusDisplay.textContent = `${remaining} more to go!`;
+                statusDisplay.className = 'status in-progress';
+            } else {
+                statusDisplay.textContent = "Let's get moving!";
+                statusDisplay.className = 'status in-progress';
+            }
         }
 
         // Function to reset at 1:00 AM every Monday
         function resetEveryMonday() {
             const now = new Date();
-
-            // Calculate the next Monday at 1:00 AM
-            const day = now.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-            const daysUntilMonday = (8 - day) % 7; // Days left until next Monday
+            const day = now.getDay();
+            const daysUntilMonday = (8 - day) % 7 || 7;
             const nextMonday = new Date(
                 now.getFullYear(),
                 now.getMonth(),
-                now.getDate() + daysUntilMonday, // Add days to get to Monday
-                1, 0, 0, 0 // Set time to 1:00 AM
+                now.getDate() + daysUntilMonday,
+                1, 0, 0, 0
             );
-
-            const msUntilMonday = nextMonday - now; // Time difference in milliseconds
-
+            const msUntilMonday = nextMonday - now;
             setTimeout(() => {
-                count = 0; // Reset the count
-                updateCount(); // Update the display and save
-                resetEveryMonday(); // Schedule the next reset
+                count = 0;
+                updateDisplay();
+                resetEveryMonday();
             }, msUntilMonday);
         }
 
-        // Initialize the weekly reset and the count
+        // Initialize the weekly reset
         resetEveryMonday();
     </script>
 </body>
