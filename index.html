@@ -18,138 +18,102 @@
         }
 
         .widget-container {
-            width: 300px;
+            width: 200px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            border-radius: 30px;  
+            border-radius: 20px;  
             background: linear-gradient(145deg, #252540, #1c1c30);
             box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.4),
+                0 8px 20px rgba(0, 0, 0, 0.4),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);  
-            padding: 25px;
+            padding: 15px;
             text-align: center;
         }
 
         .header {
-            font-size: 1rem;
-            margin-bottom: 5px;
+            font-size: 0.7rem;
+            margin-bottom: 2px;
             color: #b8b8d1;
             letter-spacing: 1px;
         }
 
-        /* Pink count display */
         .count-display {
-            font-size: 4rem;
+            font-size: 2.5rem;
             font-weight: bold;
             color: #f472b6;
-            margin: 10px 0;
+            margin: 5px 0;
             font-family: 'Courier New', monospace;
-            text-shadow: 0 0 20px rgba(244, 114, 182, 0.5);
+            text-shadow: 0 0 15px rgba(244, 114, 182, 0.5);
         }
 
-        /* Status indicator */
         .status {
-            font-size: 0.8rem;
+            font-size: 0.65rem;
             color: #888;
-            margin-bottom: 20px;
-            height: 18px;
-            padding: 4px 12px;
-            border-radius: 20px;
+            margin-bottom: 12px;
+            padding: 3px 10px;
+            border-radius: 15px;
             background: rgba(255,255,255,0.05);
         }
 
-        .status.in-progress {
-            color: #c4b5fd;
-            background: rgba(167, 139, 250, 0.15);
-        }
+        .status.in-progress { color: #c4b5fd; background: rgba(167, 139, 250, 0.15); }
+        .status.complete { color: #f9a8d4; background: rgba(244, 114, 182, 0.15); }
 
-        .status.complete {
-            color: #f9a8d4;
-            background: rgba(244, 114, 182, 0.15);
-        }
-
-        /* Button container */
         .button-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             width: 100%;
         }
 
-        /* Base button style */
         .btn {
             color: white;
             border: none;
             border-radius: 50px;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             cursor: pointer;
             transition: all 0.2s ease;
             font-weight: 500;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); }
+        .btn:active { transform: translateY(0); }
 
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        /* Main add button */
         .btn-add {
             background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-            padding: 14px 28px;
-            font-size: 0.95rem;
+            padding: 8px 16px;
         }
+        .btn-add:hover { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
 
-        .btn-add:hover {
-            background: linear-gradient(135deg, #a78bfa, #7c3aed);
-        }
-
-        /* Small minus button */
         .btn-minus {
-            width: 45px;
-            height: 45px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: linear-gradient(135deg, #7c3aed, #5b21b6);
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
         }
+        .btn-minus:hover { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
 
-        .btn-minus:hover {
-            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
-        }
-
-        /* Reset button - cute circular pink */
         .btn-reset {
-            width: 45px;
-            height: 45px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: linear-gradient(135deg, #f472b6, #db2777);
-            font-size: 1.2rem;
+            font-size: 0.95rem;
             padding: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 15px rgba(219, 39, 119, 0.4);
+            box-shadow: 0 3px 10px rgba(219, 39, 119, 0.4);
         }
+        .btn-reset:hover { background: linear-gradient(135deg, #f9a8d4, #f472b6); }
 
-        .btn-reset:hover {
-            background: linear-gradient(135deg, #f9a8d4, #f472b6);
-            box-shadow: 0 6px 20px rgba(219, 39, 119, 0.5);
-        }
-
-        /* Single icon */
-        .icon {
-            font-size: 1.5rem;
-            margin-bottom: 8px;
-        }
+        .icon { font-size: 1rem; margin-bottom: 4px; }
     </style>
 </head>
 <body>
@@ -160,56 +124,40 @@
         <div class="status" id="status">Let's get moving!</div>
         <div class="button-container">
             <button class="btn btn-minus" onclick="decrementCount()">−</button>
-            <button class="btn btn-add" onclick="incrementCount()">🏃‍♀️ Add Shuffle</button>
+            <button class="btn btn-add" onclick="incrementCount()">🏃‍♀️ Add</button>
             <button class="btn btn-reset" onclick="resetCount()">↻</button>
         </div>
     </div>
 
     <script>
-        // Set the goal
         const goal = 5;
         const countGoalDisplay = document.getElementById('count-goal');
         const statusDisplay = document.getElementById('status');
-
-        // Retrieve the saved count from localStorage
         let count = parseInt(localStorage.getItem('shuffleCount')) || 0;
 
-        // Update display on load
         updateDisplay();
 
-        // Function to increment the count
         function incrementCount() {
-            if (count < goal) {
-                count++;
-                updateDisplay();
-            }
+            if (count < goal) { count++; updateDisplay(); }
         }
 
-        // Function to decrement the count
         function decrementCount() {
-            if (count > 0) {
-                count--;
-                updateDisplay();
-            }
+            if (count > 0) { count--; updateDisplay(); }
         }
 
-        // Function to reset the count
         function resetCount() {
             count = 0;
             updateDisplay();
         }
 
-        // Function to update the display and save to localStorage
         function updateDisplay() {
             countGoalDisplay.textContent = `${count} / ${goal}`;
             localStorage.setItem('shuffleCount', count);
-
             if (count >= goal) {
                 statusDisplay.textContent = '🎉 Goal reached!';
                 statusDisplay.className = 'status complete';
             } else if (count > 0) {
-                const remaining = goal - count;
-                statusDisplay.textContent = `${remaining} more to go!`;
+                statusDisplay.textContent = `${goal - count} more to go!`;
                 statusDisplay.className = 'status in-progress';
             } else {
                 statusDisplay.textContent = "Let's get moving!";
@@ -217,26 +165,13 @@
             }
         }
 
-        // Function to reset at 1:00 AM every Monday
         function resetEveryMonday() {
             const now = new Date();
             const day = now.getDay();
             const daysUntilMonday = (8 - day) % 7 || 7;
-            const nextMonday = new Date(
-                now.getFullYear(),
-                now.getMonth(),
-                now.getDate() + daysUntilMonday,
-                1, 0, 0, 0
-            );
-            const msUntilMonday = nextMonday - now;
-            setTimeout(() => {
-                count = 0;
-                updateDisplay();
-                resetEveryMonday();
-            }, msUntilMonday);
+            const nextMonday = new Date(now.getFullYear(), now.getMonth(), now.getDate() + daysUntilMonday, 1, 0, 0, 0);
+            setTimeout(() => { count = 0; updateDisplay(); resetEveryMonday(); }, nextMonday - now);
         }
-
-        // Initialize the weekly reset
         resetEveryMonday();
     </script>
 </body>
